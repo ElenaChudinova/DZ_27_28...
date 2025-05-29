@@ -32,11 +32,3 @@ class BlogForm(YourForm, StyleFormMixin, ModelForm):
                 raise ValidationError('Запрещенное слово')
 
         return blog_name
-
-    def clean_description(self):
-        description = self.cleaned_data['description']
-        for forbidden_word in self.forbidden_words:
-            if forbidden_word in description.lower():
-                raise ValidationError('Запрещенное слово')
-
-        return description
