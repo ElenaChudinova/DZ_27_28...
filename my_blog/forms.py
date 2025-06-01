@@ -23,7 +23,7 @@ class StyleFormMixin:
 class BlogForm(YourForm, StyleFormMixin, ModelForm):
     class Meta:
         model = Blog
-        exclude = ["views_counter", ]
+        exclude = ["views_counter", "owner", ]
 
     def clean_blog_name(self):
         blog_name = self.cleaned_data['blog_name']

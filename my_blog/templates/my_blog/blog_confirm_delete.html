@@ -8,11 +8,12 @@
                     <p class="card-text">Действительно хотите удалить{{ object.blog_name }}</p>
                     <div class="card-body">
                         {% csrf_token %}
+                        {% if user.is_authenticated %}
                         <div class="d-grid mt-3">
                             <button type="submit" class="btn btn-outline-primary">Удалить</button>
                             <a class="btn btn-primary" href="{% url 'my_blog:blog_list' %}">Отменить</a>
                         </div>
-
+                        {% endif %}
                     </div>
                 </div>
             </form>
