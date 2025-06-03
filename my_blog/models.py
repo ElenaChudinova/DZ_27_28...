@@ -1,5 +1,8 @@
 from django.db import models
 
+from blog_users.models import BlogUser
+
+
 class Category(models.Model):
     id = models.AutoField(auto_created=True, primary_key=True, verbose_name="id")
     category_name = models.CharField(max_length=50, verbose_name="Наименование", help_text='Введите категорию')
@@ -54,6 +57,8 @@ class Blog(models.Model):
         default=0,
     )
 
+    owner = models.ForeignKey(BlogUser, verbose_name="Владелец", help_text="Укажите автора блога", blank=True, null=True, on_delete=models.SET_NULL)
+
     def __str__(self):
         return f"{self.blog_name} {self.category_name}"
 
@@ -62,4 +67,9 @@ class Blog(models.Model):
         verbose_name_plural = "блоги"
         ordering = [
             "blog_name",
+        ]
+        permissions = [
+            ("can_edit_blog_name", "Can edit blog_name"),
+            ("can_edit_description", "Can edit description"),
+            ("can_unpublish_blog", "Can unpublish blog")
         ]

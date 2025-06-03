@@ -6,5 +6,5 @@ from my_blog.forms import StyleFormMixin
 class BlogUserRegisterForm(StyleFormMixin, UserCreationForm):
     class Meta:
         model = BlogUser
-        fields = ('email', 'password1', 'password2',)
+        fields = ("email", "password1", "password2")
 

@@ -2,7 +2,7 @@ import secrets
 from django.core.mail import send_mail
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView
 from blog_users.forms import BlogUserRegisterForm
 from blog_users.models import BlogUser
 
@@ -12,7 +12,7 @@ from config.settings import EMAIL_HOST_USER
 class BlogUserCreateView(CreateView):
     model = BlogUser
     form_class = BlogUserRegisterForm
-    template_name = 'blog_users/bloguser_form.html'
+    template_name = 'blog_users/user_form.html'
     success_url = reverse_lazy('blog_users:login')
 
     def form_valid(self, form):
