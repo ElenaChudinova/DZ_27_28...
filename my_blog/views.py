@@ -1,8 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from my_blog.models import Blog
-from my_blog.forms import BlogForm
+from my_blog.forms import BlogForm, BlogModeratorForm
 
 
 class BlogListView(ListView):
@@ -12,14 +13,16 @@ class BlogListView(ListView):
         return Blog.objects.filter(publication=True)
 
 
-class BlogDetailView(DetailView):
+class BlogDetailView(DetailView, LoginRequiredMixin):
     model = Blog
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        self.object.views_counter += 1
-        self.object.save()
-        return self.object
+        if self.request.user == self.object.owner:
+            self.object.views_counter += 1
+            self.object.save()
+            return self.object
+        raise PermissionDenied
 
 class BlogCreateView(CreateView, LoginRequiredMixin):
     model = Blog
@@ -47,6 +50,17 @@ class BlogUpdateView(UpdateView, LoginRequiredMixin):
 
     def get_success_url(self):
         return reverse('my_blog:blog_detail', args=[self.kwargs.get('pk')])
+
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return BlogForm
+        if user.has_perm("my_blog.can_unpublish_blog") and user.has_perm(
+                "my_blog.can_edit_blog_name") and user.has_perm("my_blog.can_edit_description"):
+            return BlogModeratorForm
+        raise PermissionDenied
+
+
 
 class BlogDeleteView(DeleteView, LoginRequiredMixin):
     model = Blog

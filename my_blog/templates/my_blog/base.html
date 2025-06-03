@@ -63,8 +63,7 @@
                 <p class="lead text-body-secondary">Кабинет блогера</p>
                 {% if user.is_authenticated %}
                 <p>
-                <a href="{% url 'my_blog:blog_create' %}">
-                <input class="btn btn-primary" type="button">Добавить блог</a>
+                    <a class="btn btn-primary" href="{% url 'my_blog:blog_create' %}" role="button">Добавить блог</a>
                 </p>
                 {% endif %}
             </div>

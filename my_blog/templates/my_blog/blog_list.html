@@ -14,11 +14,13 @@
                             <div class="btn-group">
                                 <a class="btn btn-primary" href="{% url 'my_blog:blog_detail' blog.pk %}"
                                    role="button">Инфо</a>
+                                {% if perms.my_blog.can_unpublish_blog and perms.my_blog.can_edit_blog_name and perms.my_blog.can_edit_description or user == blog.owner %}
                                 {% if user.is_authenticated %}
                                  <a class="btn btn-primary" href="{% url 'my_blog:blog_update' blog.pk %}"
                                    role="button">Редактировать</a>
                                  <a class="btn btn-primary" href="{% url 'my_blog:blog_delete' blog.pk %}"
                                    role="button">Удалить</a>
+                                {% endif %}
                                 {% endif %}
                             </div>
                         </div>

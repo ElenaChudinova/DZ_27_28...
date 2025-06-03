@@ -1,5 +1,4 @@
 import os
-from django.conf.global_settings import LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -133,7 +132,7 @@ LOGOUT_REDIRECT_URL = "/"
 
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = "maknali@yandex.ru"
+EMAIL_HOST_USER: str = "maknali@yandex.ru"
 EMAIL_HOST_PASSWORD = "wogeqphpwtoyelic"
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
