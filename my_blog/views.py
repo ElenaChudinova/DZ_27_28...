@@ -4,13 +4,14 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from my_blog.models import Blog
 from my_blog.forms import BlogForm, BlogModeratorForm
+from my_blog.services import get_my_blog_from_cache
 
 
 class BlogListView(ListView):
     model = Blog
 
     def get_queryset(self):
-        return Blog.objects.filter(publication=True)
+        return get_my_blog_from_cache()
 
 
 class BlogDetailView(DetailView, LoginRequiredMixin):
@@ -65,10 +66,3 @@ class BlogUpdateView(UpdateView, LoginRequiredMixin):
 class BlogDeleteView(DeleteView, LoginRequiredMixin):
     model = Blog
     success_url = reverse_lazy('my_blog:blog_list')
-
-    def form_valid(self, form):
-        blog = form.save()
-        user = self.request.user
-        blog.owner = user
-        blog.save()
-        return super().form_valid(form)

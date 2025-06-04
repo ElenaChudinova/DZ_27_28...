@@ -57,7 +57,8 @@ class Blog(models.Model):
         default=0,
     )
 
-    owner = models.ForeignKey(BlogUser, verbose_name="Владелец", help_text="Укажите автора блога", blank=True, null=True, on_delete=models.SET_NULL)
+    owner = models.ForeignKey(BlogUser, verbose_name="Владелец", help_text="Укажите автора блога", blank=True,
+                              null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f"{self.blog_name} {self.category_name}"
