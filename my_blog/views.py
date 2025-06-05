@@ -1,17 +1,31 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.template import context
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from my_blog.models import Blog
+from my_blog.models import Blog, Category
 from my_blog.forms import BlogForm, BlogModeratorForm
-from my_blog.services import get_my_blog_from_cache
+from my_blog.services import get_category_from_cache
 
 
 class BlogListView(ListView):
     model = Blog
 
     def get_queryset(self):
-        return get_my_blog_from_cache()
+        return Blog.objects.filter(publication=True)
+
+class BlogCategoryListView(ListView):
+    model = Blog
+    success_url = reverse_lazy('my_blog:category_list')
+
+    def get_context_data(self, **kwargs):
+        categories = Category.objects.all()
+        conext = super().get_context_data(**kwargs)
+        context['category'] = categories
+        return conext
+
+    def get_queryset(self):
+        return get_category_from_cache()
 
 
 class BlogDetailView(DetailView, LoginRequiredMixin):
@@ -24,6 +38,8 @@ class BlogDetailView(DetailView, LoginRequiredMixin):
             self.object.save()
             return self.object
         raise PermissionDenied
+
+
 
 class BlogCreateView(CreateView, LoginRequiredMixin):
     model = Blog

@@ -1,0 +1,23 @@
+{% extends "my_blog/base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Выбрать категорию</h2>
+                    <form method="POST" action="{% url 'category_list' %}">
+                        {% csrf_token %}
+                        <select name="category">
+                            {% for category in categories %}
+                            <option value="{{ category }}">{{ category_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit">Выбрать</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
