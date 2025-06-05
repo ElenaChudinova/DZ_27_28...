@@ -1,17 +1,16 @@
 from django.core.cache import cache
-
 from config.settings import CACHE_ENABLED
 from my_blog.models import Blog
 
 
-def get_my_blog_from_cache():
-    """Получает данные об опубликованных блогах из кэша, если кэш пуст, получает данные из БД"""
+def get_category_from_cache():
+    """Получает данные о блогах из категории 'экстрим' из кэша, если кэш пуст, получает данные из БД"""
     if not CACHE_ENABLED:
-        return Blog.objects.filter(publication=True)
-    key = "blogs_list"
-    blogs = cache.get(key)
-    if blogs is not None:
-        return blogs
-    blogs = Blog.objects.filter(publication=True)
-    cache.set(key, blogs)
-    return blogs
+        return Blog.objects.filter(category_name='экстрим')
+    key = "category_list"
+    categories = cache.get(key)
+    if categories is not None:
+        return categories
+    categories = Blog.objects.filter(category_name='экстрим')
+    cache.set(key, categories)
+    return categories
