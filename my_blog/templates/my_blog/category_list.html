@@ -6,7 +6,7 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h2 class="card-title text-center mb-4">Выбрать категорию</h2>
-                    <form method="POST" action="{% url 'category_list' %}">
+                    <form method="POST" action="{% url 'category_list' id.pk %}">
                         {% csrf_token %}
                         <select name="category">
                             {% for category in categories %}

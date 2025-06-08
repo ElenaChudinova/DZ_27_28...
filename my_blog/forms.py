@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, BooleanField
 
-from .models import Blog
+from .models import Blog, Category
 
 
 class YourForm(forms.Form):
@@ -37,3 +37,9 @@ class BlogModeratorForm(YourForm, StyleFormMixin, ModelForm):
     class Meta:
         model = Blog
         fields = ("publication", "blog_name", "description")
+
+
+class BlogCategoryForm(YourForm, ModelForm):
+    class Meta:
+        model = Category
+        fields = ("id", "category_name", "description")
