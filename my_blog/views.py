@@ -15,13 +15,8 @@ class BlogListView(ListView):
         return Blog.objects.filter(publication=True)
 
 class BlogCategoryListView(ListView):
-    model = Blog
-
-    def get_context_data(self, **kwargs):
-        categories = Category.objects.all()
-        conext = super().get_context_data(**kwargs)
-        context['category'] = categories
-        return conext
+    model = Category
+    template_name = 'categories.html'
 
     def get_queryset(self):
         return get_category_from_cache()
