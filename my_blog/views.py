@@ -14,12 +14,18 @@ class BlogListView(ListView):
     def get_queryset(self):
         return Blog.objects.filter(publication=True)
 
-class BlogCategoryListView(ListView):
-    model = Category
-    template_name = 'categories.html'
 
-    def get_queryset(self):
-        return get_category_from_cache()
+
+class BlogCategoryDetailView(DetailView):
+    model = Category
+    template_name =  'my_blog/categories.html'
+
+    def get_context_data(self, **kwargs):
+        categories = self.object.id
+        context = super().get_context_data(**kwargs)
+        context['categories'] = get_category_from_cache(categories)
+        return context
+
 
 
 class BlogDetailView(DetailView, LoginRequiredMixin):
@@ -46,6 +52,8 @@ class BlogCreateView(CreateView, LoginRequiredMixin):
         blog.owner = user
         blog.save()
         return super().form_valid(form)
+
+
 
 class BlogUpdateView(UpdateView, LoginRequiredMixin):
     model = Blog
