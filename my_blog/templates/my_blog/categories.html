@@ -6,14 +6,16 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             <div class="col">
                 <div class="card shadow-sm">
-                    <img src="{{ category.blog.image | media_filter }}">
                     <div class="card-body">
                         <p class="card-text">Список категорий:{{ object.category_name }}</p>
                         <div class="card-body">
                             {% for category in categories %}
                             <div class="d-grid mt-3">
-                                <p class="btn btn-primary"> Название: {{category.category_name}}</p>
-                                <p class="btn btn-primary">Описание: {{category.description}}</p>
+                                <img src="{{ category.blog.image | media_filter }}">
+                                <p class="card-text">{{object.blog_name}}</p>
+                                <p class="card-text">Описание: {{object.description}}</p>
+                                <p class="card-text">Категория: {{object.category_name}}</p>
+                                <p class="card-text">Дата публикации: {{object.created_at}}</p>
                             </div>
                             {% endfor %}
                         </div>
