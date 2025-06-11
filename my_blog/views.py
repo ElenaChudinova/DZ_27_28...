@@ -17,7 +17,7 @@ class BlogListView(ListView):
 
 
 class BlogCategoryDetailView(DetailView):
-    model = Category
+    model = Blog
     template_name =  'my_blog/categories.html'
 
     def get_context_data(self, **kwargs):
