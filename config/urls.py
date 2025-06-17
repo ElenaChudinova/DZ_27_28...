@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('my_blog.urls', namespace='my_blog')),
-    path('blog_users/', include('blog_users.urls', namespace='blog_users')),
+    path('users/', include('users.urls', namespace='users')),
+    path('message/', include('message.urls', namespace='message')),
+    path('sending/', include('sending.urls', namespace='sending')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
