@@ -19,7 +19,6 @@ DEBUG = True if os.getenv('DEBUG') == "True" else False
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -29,8 +28,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'my_blog',
-    'blog_users',
+    'users',
+    'message',
+    'sending',
 ]
 
 MIDDLEWARE = [
@@ -103,10 +103,8 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'Europe/Moscow'
-
 USE_I18N = True
 USE_L18N = True
-
 USE_TZ = True
 
 
@@ -125,7 +123,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'blog_users.BlogUser'
+AUTH_USER_MODEL = 'users.MailingRecipient'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
