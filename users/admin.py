@@ -4,4 +4,4 @@ from users.models import MailingRecipient
 
 @admin.register(MailingRecipient)
 class MailingRecipientAdmin(admin.ModelAdmin):
-    list_display = ('id', 'email')
+    list_display = ('user_id', 'email', 'comment')
