@@ -1,6 +1,5 @@
 from django.forms import ModelForm, BooleanField
 
-from users.forms import YourForm
 from .models import Message
 
 
@@ -14,7 +13,7 @@ class StyleFormMixin:
                 fild.widget.attrs['class'] = 'form-control'
 
 
-class MessageForm(YourForm, ModelForm):
+class MessageForm(ModelForm):
     class Meta:
         model = Message
         fields = ("subject_letter", "letter")

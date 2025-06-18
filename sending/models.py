@@ -1,6 +1,7 @@
-from django.contrib.messages.storage.base import Message
+
 from django.db import models
 
+from message.models import Message
 from users.models import MailingRecipient
 
 
@@ -79,6 +80,8 @@ class MailingAttempt(models.Model):
         Newsletter,
         verbose_name="Рассылка",
         on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
 
     def __str__(self):

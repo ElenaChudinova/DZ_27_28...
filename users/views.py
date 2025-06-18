@@ -51,8 +51,8 @@ def email_verification(request, token):
 class MailingRecipientUpdateView(UpdateView, LoginRequiredMixin):
     model = MailingRecipient
     form_class = MailingRecipientForm
-    template_name = 'users/user_form.html'
-    success_url = reverse_lazy('users:user_list')
+    template_name = 'users/mailingrecipient_form.html'
+    success_url = reverse_lazy('users:mailingrecipient_list')
 
     def form_valid(self, form):
         blog = form.save()
@@ -75,4 +75,4 @@ class MailingRecipientUpdateView(UpdateView, LoginRequiredMixin):
 
 class MailingRecipientDeleteView(DeleteView, LoginRequiredMixin):
     model = MailingRecipient
-    success_url = reverse_lazy('users:user_list')
+    success_url = reverse_lazy('users:mailingrecipient_list')

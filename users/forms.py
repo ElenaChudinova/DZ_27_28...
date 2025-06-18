@@ -1,6 +1,4 @@
 import secrets
-
-from django import forms
 from django.conf.global_settings import EMAIL_HOST_USER
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
@@ -23,7 +21,7 @@ class UserRegisterForm(StyleFormMixin, UserCreationForm):
 class UserCreateView(CreateView):
     model = MailingRecipient
     form_class = UserRegisterForm
-    template_name = 'users/user_form.html'
+    template_name = 'users/mailingrecipient_form.html'
     success_url = reverse_lazy('users:login')
 
     def form_valid(self, form):
@@ -49,15 +47,12 @@ def email_verification(request, token):
     return redirect(reverse("users:login"))
 
 
-class YourForm(forms.Form):
-    pass
-
-class MailingRecipientForm(YourForm, ModelForm):
+class MailingRecipientForm(ModelForm):
     class Meta:
         model = MailingRecipient
         fields = ("email", "username", "comment")
 
-class MailingRecipientManagerForm(YourForm, StyleFormMixin, ModelForm):
+class MailingRecipientManagerForm(StyleFormMixin, ModelForm):
     class Meta:
         model = MailingRecipient
         fields = ("email", "username", "comment")
