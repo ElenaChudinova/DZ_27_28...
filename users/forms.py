@@ -21,7 +21,7 @@ class UserRegisterForm(StyleFormMixin, UserCreationForm):
 class UserCreateView(CreateView):
     model = MailingRecipient
     form_class = UserRegisterForm
-    template_name = 'users/mailingrecipient_form.html'
+    template_name = 'users/mailing_recipient_detail_form.html'
     success_url = reverse_lazy('users:login')
 
     def form_valid(self, form):

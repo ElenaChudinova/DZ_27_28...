@@ -58,11 +58,13 @@
 <main>
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
-            <div class="col-lg-6 col-md-8 mx-auto"><h1 class="fw-light">MEILIGEN.RU</h1>
-                <p class="lead text-body-secondary">Делаем e-mail рассылки «под ключ», которые приносят вам новые заказы</p>
+            <div class="col-lg-6 col-md-8 mx-auto"><h1 class="fw-light">MAILIGEN.RU</h1>
+                <p class="lead text-body-secondary">Делаем e-mail рассылки «под ключ», которые приносят вам новые
+                    заказы</p>
                 {% if user.is_authenticated %}
                 <p>
-                    <a class="btn btn-primary" href="{% url 'message:message_create' %}" role="button">Добавить сообщение</a>
+                    <a class="btn btn-primary" href="{% url 'message:message_create' %}" role="button">Добавить
+                        сообщение</a>
                 </p>
                 {% endif %}
             </div>
@@ -89,8 +91,10 @@
                 </li>
             </ul>
         </nav>
-        <p class="fs-4 mb-2">Мы умеем всё в email рассылках. Позвольте нам сделать то, что у нас лучше всего получается.</p>
-        <p class="mb-2">На вас работает международная команда экспертов - маркетологов, копирайтеров, дизайнеров, web-разработчиков - по цене одного штатного сотрудника.</p>
+        <p class="fs-4 mb-2">Мы умеем всё в email рассылках. Позвольте нам сделать то, что у нас лучше всего
+            получается.</p>
+        <p class="mb-2">На вас работает международная команда экспертов - маркетологов, копирайтеров, дизайнеров,
+            web-разработчиков - по цене одного штатного сотрудника.</p>
     </div>
 </footer>
 <script src="{% static '/js/bootstrap.bundle.min.js' %}"></script>

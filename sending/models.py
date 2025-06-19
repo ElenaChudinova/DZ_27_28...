@@ -47,12 +47,20 @@ class Newsletter(models.Model):
         MailingRecipient, related_name="emails", verbose_name="Получатель"
     )
 
+    disabling_mailings = models.BooleanField(default=False)
+
     def __str__(self):
         return self.status_news_letter
 
     class Meta:
         verbose_name = "статус"
         verbose_name_plural = "статусы"
+        ordering = [
+            "disabling_mailings",
+        ]
+        permissions = [
+            ("can_edit_disabling_mailings", "Сan edit disabling mailings"),
+        ]
 
 
 class MailingAttempt(models.Model):
