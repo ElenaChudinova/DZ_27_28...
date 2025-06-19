@@ -16,29 +16,27 @@ from users.models import MailingRecipient
 
 
 
-class MyView(TemplateView):
+class MailingRecipientListView(ListView):
+    model = MailingRecipient
     template_name = 'base.html'
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx.update({
-            'newsletter_all' : Newsletter.objects.all(),
+            'newsletter_all': Newsletter.objects.all(),
             'newsletter': Newsletter.objects.filter(status_news_letter=self.request.LAUNCHED),
             'mailings': MailingRecipient.objects.upcoming(),
         })
         return ctx
-
-class MailingRecipientListView(ListView):
-    model = MailingRecipient
-
-    def get_queryset(self):
-        return MailingRecipient.objects.all()
 
 
 class MailingRecipientCreateView(CreateView, LoginRequiredMixin):
     model = MailingRecipient
     form_class = MailingRecipientForm
     success_url = reverse_lazy('users:login')
+
+    def get_queryset(self):
+        return MailingRecipient.objects.filter(pk=self.request.user.pk)
 
     def form_valid(self, form):
         user = form.save()
