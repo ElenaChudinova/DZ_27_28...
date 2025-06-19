@@ -10,6 +10,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
 from message.models import Message
+from sending.models import Newsletter
 from users.forms import MailingRecipientForm, MailingRecipientManagerForm
 from users.models import MailingRecipient
 
@@ -21,8 +22,8 @@ class MyView(TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx.update({
-            'clients' : MailingRecipient.objects.all(),
-            'messages': Message.objects.filter(user=self.request.user),
+            'newsletter_all' : Newsletter.objects.all(),
+            'newsletter': Newsletter.objects.filter(status_news_letter=self.request.LAUNCHED),
             'mailings': MailingRecipient.objects.upcoming(),
         })
         return ctx
