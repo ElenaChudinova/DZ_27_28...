@@ -4,9 +4,83 @@ from django.template import context
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from message.forms import MessageForm
-from sending.forms import NewsletterForm
-from sending.models import Newsletter
+from sending.forms import NewsletterForm, MessageForm, MailingRecipientForm
+from sending.models import Newsletter, Message, MailingRecipient
+
+
+class HomeListView(ListView):
+    model = MailingRecipient
+    template_name = 'base.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx.update({
+            'newsletter_all': Newsletter.objects.all(),
+            'newsletter': Newsletter.objects.filter(status_news_letter=self.request.LAUNCHED),
+            'mailings': MailingRecipient.objects.upcoming(),
+        })
+        return ctx
+
+class MailingRecipientCreateView(CreateView, LoginRequiredMixin):
+    model = MailingRecipient
+    form_class = MailingRecipientForm
+
+    def get_queryset(self):
+        return MailingRecipient.objects.filter(pk=self.request.user.pk)
+
+class MailingRecipientUpdateView(UpdateView, LoginRequiredMixin):
+    model = MailingRecipient
+    form_class = MailingRecipientForm
+    success_url = reverse_lazy('sending:mailing_recipient_list')
+
+class MailingRecipientDeleteView(DeleteView, LoginRequiredMixin):
+    model = MailingRecipient
+    success_url = reverse_lazy('sending:mailing_recipient_list')
+
+
+class MessageListView(ListView):
+    model = Message
+
+class MessageDetailView(DetailView, LoginRequiredMixin):
+    model = Message
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.request.user == self.object.owner:
+            self.object.views_counter += 1
+            self.object.save()
+            return self.object
+        raise PermissionDenied
+
+class MessageCreateView(CreateView, LoginRequiredMixin):
+    model = Message
+    form_class = MessageForm
+    success_url = reverse_lazy('sending:message_list')
+
+    def form_valid(self, form):
+        message = form.save()
+        user = self.request.user
+        message.owner = user
+        message.save()
+        return super().form_valid(form)
+
+class MessageUpdateView(UpdateView, LoginRequiredMixin):
+    model = Message
+    form_class = MessageForm
+    success_url = reverse_lazy('sending:message_list')
+
+    def form_valid(self, form):
+        message = form.save()
+        user = self.request.user
+        message.owner = user
+        message.save()
+        return super().form_valid(form)
+
+
+class MessageDeleteView(DeleteView, LoginRequiredMixin):
+    model = Message
+    success_url = reverse_lazy('sending:message_list')
+
 
 class NewsletterListView(ListView):
     model = Newsletter

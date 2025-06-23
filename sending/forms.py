@@ -1,7 +1,32 @@
 from django.forms import ModelForm, BooleanField
 
-from message.forms import StyleFormMixin
-from .models import Newsletter, MailingAttempt
+from .models import Newsletter, MailingAttempt, Message, MailingRecipient
+
+
+class StyleFormMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for fild_name, fild in self.fields.items():
+            if isinstance(fild, BooleanField):
+                fild.widget.attrs['class'] = 'form-check-input'
+            else:
+                fild.widget.attrs['class'] = 'form-control'
+
+class MailingRecipientForm(ModelForm):
+    class Meta:
+        model = MailingRecipient
+        fields = ("email", "username", "comment")
+
+class MailingRecipientManagerForm(StyleFormMixin, ModelForm):
+    class Meta:
+        model = MailingRecipient
+        fields = ("email", "username", "comment")
+
+class MessageForm(ModelForm):
+    class Meta:
+        model = Message
+        fields = ("subject_letter", "letter")
+
 
 class NewsletterForm(ModelForm):
     class Meta:
