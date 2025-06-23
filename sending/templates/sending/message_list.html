@@ -1,5 +1,4 @@
-{% extends 'users/base.html' %}
-{% load my_tags %}
+{% extends 'sending/base.html' %}
 {% block content %}
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
@@ -13,13 +12,13 @@
                             <div class="btn-group">
                               {% if perms.message.can_edit_subject_letter and perms.message.can_edit_letter or user == message.owner %}
                                 {% if user.is_authenticated %}
-                                <a class="btn btn-primary" href="{% url 'message:message_detail' message.pk %}"
+                                <a class="btn btn-primary" href="{% url 'sending:message_detail' message.pk %}"
                                    role="button">Подробней</a>
-                                 <a class="btn btn-primary" href="{% url 'message:message_update' message.pk %}"
+                                 <a class="btn btn-primary" href="{% url 'sending:message_update' message.pk %}"
                                    role="button">Редактировать</a>
                                {% endif %}
                                 {% endif %}
-                                 <a class="btn btn-primary" href="{% url 'message:message_delete' message.pk %}"
+                                 <a class="btn btn-primary" href="{% url 'sending:message_delete' message.pk %}"
                                    role="button">Удалить</a>
                             </div>
                         </div>

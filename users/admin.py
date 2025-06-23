@@ -1,7 +1,7 @@
 from django.contrib import admin
-from users.models import MailingRecipient
+from users.models import Clients
 
 
-@admin.register(MailingRecipient)
-class MailingRecipientAdmin(admin.ModelAdmin):
-    list_display = ('user_id', 'email', 'comment')
+@admin.register(Clients)
+class ClientsAdmin(admin.ModelAdmin):
+    list_display = ('сlient_id', 'email', 'сlient_name', 'phone', 'country', )

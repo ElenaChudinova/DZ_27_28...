@@ -1,42 +1,36 @@
 import secrets
-
 from django.conf.global_settings import EMAIL_HOST_USER
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
-from django.template import context
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
-from message.models import Message
-from sending.models import Newsletter
-from users.forms import MailingRecipientForm, MailingRecipientManagerForm
-from users.models import MailingRecipient
+from users.models import Clients
+from users.forms import ClientsRegisterForm
 
+class ClientsListView(ListView):
+    model = Clients
 
+class ClientsDetailView(DetailView, LoginRequiredMixin):
+    model = Clients
 
-class MailingRecipientListView(ListView):
-    model = MailingRecipient
-    template_name = 'base.html'
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx.update({
-            'newsletter_all': Newsletter.objects.all(),
-            'newsletter': Newsletter.objects.filter(status_news_letter=self.request.LAUNCHED),
-            'mailings': MailingRecipient.objects.upcoming(),
-        })
-        return ctx
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.request.user == self.object.owner:
+            self.object.views_counter += 1
+            self.object.save()
+            return self.object
+        raise PermissionDenied
 
 
-class MailingRecipientCreateView(CreateView, LoginRequiredMixin):
-    model = MailingRecipient
-    form_class = MailingRecipientForm
+class ClientsCreateView(LoginRequiredMixin, CreateView):
+    model = Clients
+    form_class = ClientsRegisterForm
+    template_name = 'users/client_form.html'
     success_url = reverse_lazy('users:login')
 
-    def get_queryset(self):
-        return MailingRecipient.objects.filter(pk=self.request.user.pk)
 
     def form_valid(self, form):
         user = form.save()
@@ -56,18 +50,14 @@ class MailingRecipientCreateView(CreateView, LoginRequiredMixin):
 
 
 def email_verification(request, token):
-    user = get_object_or_404(MailingRecipient, token=token)
+    user = get_object_or_404(Clients, token=token)
     user.is_active = True
     user.save()
     return redirect(reverse("users:login"))
 
-
-
-class MailingRecipientUpdateView(UpdateView, LoginRequiredMixin):
-    model = MailingRecipient
-    form_class = MailingRecipientForm
-    template_name = 'users/mailing_recipient_detail_form.html'
-    success_url = reverse_lazy('users:mailingrecipient_list')
+class ClientsUpdateView(UpdateView, LoginRequiredMixin):
+    model = Clients
+    success_url = reverse_lazy('users:client_list')
 
     def form_valid(self, form):
         blog = form.save()
@@ -76,18 +66,10 @@ class MailingRecipientUpdateView(UpdateView, LoginRequiredMixin):
         blog.save()
         return super().form_valid(form)
 
-
-    def get_form_class(self):
-        user = self.request.user
-        if user == self.object.owner:
-            return MailingRecipientForm
-        if user.has_perm("users.can_edit_subject_letter") and user.has_perm(
-                "users.can_edit_letter"):
-            return MailingRecipientManagerForm
-        raise PermissionDenied
+    def get_success_url(self):
+        return reverse('users:client_detail', args=[self.kwargs.get('pk')])
 
 
-class MailingRecipientDeleteView(DeleteView, LoginRequiredMixin):
-    model = MailingRecipient
-    success_url = reverse_lazy('users:mailingrecipient_list')
-
+class ClientsDeleteView(DeleteView, LoginRequiredMixin):
+    model = Clients
+    success_url = reverse_lazy('users:client_list')

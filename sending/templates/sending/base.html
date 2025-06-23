@@ -53,7 +53,7 @@
     </ul>
 </div>
 <header data-bs-theme="dark">
-    {% include 'users/include/inc_menu.html' %}
+    {% include 'sending/include/inc_menu.html' %}
 </header>
 <main>
     <section class="py-5 text-center container">
@@ -61,9 +61,9 @@
             <div class="col-lg-6 col-md-8 mx-auto"><h1 class="fw-light">MAILIGEN.RU</h1>
                 <p class="lead text-body-secondary">Делаем e-mail рассылки «под ключ», которые приносят вам новые
                     заказы</p>
-                {% if user.is_authenticated %}
+                {% if client.is_authenticated %}
                 <p>
-                    <a class="btn btn-primary" href="{% url 'message:message_create' %}" role="button">Добавить
+                    <a class="btn btn-primary" href="{% url 'sending:message_create' %}" role="button">Добавить
                         сообщение</a>
                 </p>
                 {% endif %}

@@ -1,5 +1,4 @@
-{% extends 'users/base.html' %}
-{% load my_tags %}
+{% extends 'sending/base.html' %}
 {% block content%}
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
@@ -7,12 +6,12 @@
             <div class="col">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <p class="card-text">{{ object.subject_letter}}</p>
-                        <p class="card-text">{{object.letter | truncatechars:300 }}</p>
-                        <p class="card-text">{{object.views_counter }}</p>
+                        <p class="card-text">{{ object.email}}</p>
+                        <p class="card-text">ФИО: {{object.username }}</p>
+                        <p class="card-text">Комментарии: {{object.comment | truncatechars:200 }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <a class="btn btn-primary" href="{% url 'users:user_list' %}" role="button">Назад</a>
+                                <a class="btn btn-primary" href="{% url 'sending:home' %}" role="button">Назад</a>
                             </div>
                         </div>
                     </div>
