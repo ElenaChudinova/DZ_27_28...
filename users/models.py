@@ -4,10 +4,10 @@ from django.db import models
 
 class Clients(AbstractUser):
     email = models.CharField(max_length=50, verbose_name="Email", unique=True)
-    сlient_id = models.AutoField(
+    id = models.AutoField(
         auto_created=True, primary_key=True, verbose_name="ID Клиента"
     )
-    сlient_name = models.CharField(
+    name = models.CharField(
         max_length=150,
         verbose_name="Ф.И.О.",
         help_text="Введите ваши инициалы",
@@ -32,8 +32,8 @@ class Clients(AbstractUser):
             max_length=100, verbose_name="Token", blank=True, null=True
         )
 
-    CLIENT_NAME_FIELD = "email"
-    REQUIRED_FIELDS = ["client_name"]
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
 
 
     def __str__(self):

@@ -1,23 +1,29 @@
+from functools import total_ordering
+
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.db.models import Count
+from django.shortcuts import render
 from django.template import context
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
+from sending import models
 from sending.forms import NewsletterForm, MessageForm, MailingRecipientForm
-from sending.models import Newsletter, Message, MailingRecipient
+from sending.models import Newsletter, Message, MailingRecipient, MailingAttempt
 
 
 class HomeListView(ListView):
     model = MailingRecipient
-    template_name = 'base.html'
+
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx.update({
             'newsletter_all': Newsletter.objects.all(),
             'newsletter': Newsletter.objects.filter(status_news_letter=self.request.LAUNCHED),
-            'mailings': MailingRecipient.objects.upcoming(),
+            'mailings': MailingRecipient.objects.all(),
         })
         return ctx
 
@@ -90,6 +96,36 @@ class NewsletterListView(ListView):
         launched = Newsletter.objects.filter(STATUS_MAILING='LAUNCHED')
         return all, launched
 
+@login_required
+def reports(request):
+    """Отчет попыток рассылки для пользователя"""
+    mailings = MailingRecipient.objects.filter(owner=request.user)
+    newsletter_attempt = (
+        MailingAttempt.objects.filter(mailings=mailings)
+        .values("mailings")
+        .annotate(
+            total_attempt=Count("mailings"),
+            successfully_attempts=Count(
+                "mailings", filter=models.Q(STATUS_MAILING_ATTEMPT='Успешно')
+            ),
+            failed_attempt=Count(
+                "mailings", filter=models.Q(STATUS_MAILING_ATTEMPT='Не успешно')
+            ),
+        )
+    )
+
+    newsletter_status = {
+        attempt["mailings"]: attempt for attempt in newsletter_attempt
+    }
+
+    context = {
+        "mailings": mailings,
+        "newsletter_status": newsletter_status,
+    }
+
+    return render(request, "mailings_reports.html", context)
+
+
 class NewsletterDetailView(DetailView, LoginRequiredMixin):
     model = Newsletter
 
@@ -124,9 +160,6 @@ class NewsletterUpdateView(UpdateView, LoginRequiredMixin):
         sending.owner = user
         sending.save()
         return super().form_valid(form)
-
-    # def get_success_url(self):
-    #     return reverse('message:middleware_detail', args=[self.kwargs.get('pk')])
 
 
 class NewsletterDeleteView(DeleteView, LoginRequiredMixin):

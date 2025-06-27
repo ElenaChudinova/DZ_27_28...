@@ -1,8 +1,7 @@
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
-from users.models import MailingRecipient
-from message.models import Message
+from sending.models import MailingRecipient, Message
 from sending.models import Newsletter, MailingAttempt
 
 

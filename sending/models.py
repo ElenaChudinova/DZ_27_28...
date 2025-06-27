@@ -1,8 +1,7 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class MailingRecipient(AbstractUser):
+class MailingRecipient(models.Model):
     email = models.CharField(max_length=100, verbose_name="Email_mailing_recipient", unique=True)
     user_id = models.AutoField(
         auto_created=True, primary_key=True, verbose_name="ID Пользователя"
