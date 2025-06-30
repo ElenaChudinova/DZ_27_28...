@@ -1,15 +1,15 @@
 from django.urls import path
 from django.views.decorators.cache import cache_page
 
-from sending.apps import SendingConfig, MessageConfig, MailingRecipientConfig
+from sending.apps import SendingConfig
 from sending.views import NewsletterListView, NewsletterCreateView, NewsletterUpdateView, NewsletterDeleteView, \
     NewsletterDetailView, MessageCreateView, MessageUpdateView, MessageDeleteView, MessageDetailView, MessageListView, \
-    HomeListView
+    HomePageView
 
-app_name = SendingConfig.name, MessageConfig.name, MailingRecipientConfig.name
+app_name = SendingConfig.name
 
 urlpatterns = [
-    path('', HomeListView.as_view(), name='home'),
+    path('', HomePageView.as_view(), name='home'),
     path('newsletter/<int:pk>/', NewsletterDetailView.as_view(), name='newsletter_detail'),
     path('newsletter/create/', NewsletterCreateView.as_view(), name="newsletter_create"),
     path('newsletter_update/<int:pk>/', NewsletterUpdateView.as_view(), name="newsletter_update"),
